@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>B1 Trade Loan</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
+  header {
+    background: #002147;
+    color: white;
+    padding: 15px;
+    text-align: center;
+  }
+  nav {
+    background: #004080;
+    display: flex;
+    justify-content: center;
+  }
+  nav a {
+    color: white;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: block;
+  }
+  nav a:hover {
+    background: #0066cc;
+  }
+  .container {
+    padding: 20px;
+  }
+  .hidden {
+    display: none;
+  }
+  .table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 15px;
+  }
+  .table, .table th, .table td {
+    border: 1px solid #999;
+  }
+  .table th, .table td {
+    text-align: center;
+    padding: 10px;
+  }
+  .login-box {
+    background: white;
+    padding: 20px;
+    width: 300px;
+    margin: 100px auto;
+    box-shadow: 0 0 10px #ccc;
+    text-align: center;
+  }
+  input[type="text"], input[type="password"] {
+    width: 90%;
+    padding: 10px;
+    margin: 5px;
+    border: 1px solid #aaa;
+  }
+  button {
+    padding: 10px 20px;
+    background: #004080;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background: #0066cc;
+  }
+  .qr {
+    text-align: center;
+  }
+  .verification {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>B1 Trade Loan</h1>
+</header>
+
+<nav id="menu" class="hidden">
+  <a href="#" onclick="showPage('home')">HOME</a>
+  <a href="#" onclick="showPage('about')">ABOUT</a>
+  <a href="#" onclick="showPage('contact')">CONTACT INFO</a>
+  <a href="#" onclick="logout()">LOG OUT</a>
+</nav>
+
+<!-- LOGIN PAGE -->
+<div id="login-page" class="login-box">
+  <h2>Login</h2>
+  <input type="text" id="phone" placeholder="Phone Number"><br>
+  <input type="password" id="password" placeholder="Password"><br>
+  <button onclick="login()">Log In</button>
+</div>
+
+<!-- HOME PAGE -->
+<div id="home" class="container hidden">
+  <h2>Welcome to B1 Investment Platform</h2>
+  <p>Live Investment Range: <strong id="liveAmount">₱8,500,000</strong></p>
+
+  <table class="table">
+    <tr><th>Type</th><th>Value</th></tr>
+    <tr><td>Market Growth</td><td id="growth">+2.5%</td></tr>
+    <tr><td>Loan Volume</td><td id="loanVolume">₱5,000,000</td></tr>
+  </table>
+
+  <h3>Your Account Balance: ₱<span id="balance">0.00</span></h3>
+
+  <button onclick="showPage('membership')">One-Time Membership ₱879</button>
+</div>
+
+<!-- ABOUT PAGE -->
+<div id="about" class="container hidden">
+  <h2>About B1</h2>
+  <p>B1 is all about <strong>Investment, Trade, and Loan.</strong> We empower users to invest and grow with transparency and opportunity.</p>
+</div>
+
+<!-- CONTACT PAGE -->
+<div id="contact" class="container hidden">
+  <h2>Contact Info</h2>
+  <p>Visit our Facebook page:</p>
+  <p><a href="https://www.facebook.com/share/1ZSzFCtDyx/?mibextid=wwXIfr" target="_blank">
+    https://www.facebook.com/share/1ZSzFCtDyx/?mibextid=wwXIfr
+  </a></p>
+</div>
+
+<!-- MEMBERSHIP PAGE -->
+<div id="membership" class="container hidden qr">
+  <h2>Membership Payment</h2>
+  <p>Pay ₱879.00 using the QR Code below:</p>
+  <img src="https://github.com/B1tradeloan/B1Borrow/blob/b4804d88ff97a15d4a63ddc4f850bd346d89916c/IMG_9339.jpeg" alt="QR Code" width="250"><br><br>
+  <button onclick="receiptSent()">I've Sent the Payment</button>
+</div>
+
+<!-- RECEIPT PAGE -->
+<div id="receipt" class="container hidden verification">
+  <p>Receipt marked as sent.</p>
+  <p>Redirecting to verification page...</p>
+</div>
+
+<!-- FOR VERIFICATION PAGE -->
+<div id="verification" class="container hidden verification">
+  <p>Your payment is <strong>FOR VERIFICATION</strong>.</p>
+  <p>Please wait for confirmation. You will receive your ₱1000 bonus once approved.</p>
+</div>
+
+<script>
+  // Remember login using localStorage
+  const savedUser = localStorage.getItem('loggedIn');
+
+  if (savedUser === 'true') {
+    document.getElementById('login-page').classList.add('hidden');
+    document.getElementById('menu').classList.remove('hidden');
+    document.getElementById('home').classList.remove('hidden');
+  }
+
+  function login() {
+    const phone = document.getElementById('phone').value;
+    const pass = document.getElementById('password').value;
+
+    if (phone && pass) {
+      localStorage.setItem('loggedIn', 'true');
+      document.getElementById('login-page').classList.add('hidden');
+      document.getElementById('menu').classList.remove('hidden');
+      showPage('home');
+    } else {
+      alert('Please enter both phone number and password.');
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem('loggedIn');
+    document.getElementById('menu').classList.add('hidden');
+    document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+    document.getElementById('login-page').classList.remove('hidden');
+  }
+
+  function showPage(pageId) {
+    document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+    document.getElementById(pageId).classList.remove('hidden');
+  }
+
+  // Simulate ever-changing live amount
+  setInterval(() => {
+    let num = 7000000 + Math.random() * 3000000;
+    document.getElementById('liveAmount').textContent = '₱' + num.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }, 1000);
+
+  // Membership flow
+  function receiptSent() {
+    showPage('receipt');
+    setTimeout(() => {
+      showPage('verification');
+    }, 3000);
+  }
+</script>
+
+</body>
+</html>
